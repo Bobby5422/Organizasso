@@ -44,6 +44,13 @@ exports.searchMessages = async (req, res) => {
     if (toDate) filter.date.$lte = new Date(toDate);
   }
 
-  const results = await Message.find(filter).sort({ date: -1 });
-  res.json(results);
+  try {
+    const results = await Message.find(filter)
+      .sort({ date: -1 })
+      .populate('userID', 'identifier'); // ✅ Ceci est ESSENTIEL pour afficher le nom
+    res.json(results);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur lors de la recherche de messages' });
+  }
 };
+

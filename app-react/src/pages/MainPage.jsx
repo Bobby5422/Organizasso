@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import SearchBar from '../components/SearchBar';
+import { searchMessages } from '../services/api';
 
 import '../styles/MainPage.css';
 
@@ -34,6 +36,16 @@ const MainPage = () => {
       setError('Erreur lors du chargement des messages');
     }
   };
+
+  const handleSearch = async (filters) => {
+  try {
+    const results = await searchMessages(filters);
+    setMessages(results);
+  } catch (err) {
+    setError('Erreur lors de la recherche.');
+    console.error(err);
+  }
+};
 
   const handleLogout = () => {
     localStorage.clear();
@@ -137,8 +149,11 @@ const MainPage = () => {
         </form>
 
         {error && <p style={{ color: 'red' }}>{error}</p>}
-
+        
         <h2>Messages du forum ouvert</h2>
+        
+        <SearchBar onSearch={handleSearch} />
+
         {messages.length === 0 ? (
           <p>Aucun message pour le moment.</p>
         ) : (

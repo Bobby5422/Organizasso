@@ -1,0 +1,68 @@
+/* Header.css */
+
+/* Structure du header en grid */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: var(--space-2);
+  background-color: var(--color-black);
+  border: none;
+  z-index: 1000;
+}
+
+/* Ligne blanche unique sous le header */
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-white);
+}
+
+/* Logo 🚀 à gauche */
+header > div:first-child {
+  justify-self: start;
+  font-size: 1rem;
+  color: var(--color-white);
+}
+
+/* Titre centré */
+header h1 {
+  justify-self: center;
+  text-align: center;
+  color: var(--color-white);
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+/* Boutons à droite, empilés, même largeur */
+header > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  justify-self: end;
+  width: max-content; /* largeur calée sur le plus grand bouton */
+}
+
+header > div:last-child button {
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+/* Supprime tout <hr> s’il traîne dans le header */
+header hr {
+  display: none;
+}

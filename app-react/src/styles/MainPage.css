@@ -1,0 +1,19 @@
+/* MainPage.css */
+
+/* Supposons que ton composant principal ait une classe "main-page" */
+.main-page {
+  /* 1) Espace intérieur pour tout le contenu */
+  padding: var(--space-2);
+
+  /* 2) On ajoute un margin-top égal à la hauteur du header
+        = header padding-top + hauteur du titre (2.5rem) + header padding-bottom */
+  margin-top: calc(var(--space-2)      /* header padding-top */
+                   + 2.5rem            /* header h1 */
+                   + var(--space-2)    /* header padding-bottom */);
+}
+
+/* Optionnel : si tu utilises un <main> natif sans wrapper */
+main {
+  padding: var(--space-2);
+  margin-top: calc(var(--space-2) + 2.5rem + var(--space-2));
+}

@@ -6,53 +6,56 @@ import { searchMessages } from '../services/api';
 
 import '../styles/MainPage.css';
 
-
 const MainPage = () => {
   const [messages, setMessages] = useState([]);
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
-  const [replyingTo, setReplyingTo] = useState(null);  // ID du message auquel on répond
+  const [replyingTo, setReplyingTo] = useState(null);
   const [replyContent, setReplyContent] = useState('');
+
   const role = localStorage.getItem('role');
   const userID = localStorage.getItem('userID');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!userID) {
-      navigate('/login');
-      return;
-    }
-    fetchMessages();
-  }, [userID]);
-
+  // Récupère les messages
   const fetchMessages = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/messages?forumID=open`);
-      if (!res.ok) throw new Error('Erreur serveur');
+      const res = await fetch('http://localhost:3000/api/messages?forumID=open');
+      if (!res.ok) throw new Error('Erreur de récupération');
       const data = await res.json();
       setMessages(data);
     } catch (err) {
-      setError('Erreur lors du chargement des messages');
+      console.error(err);
     }
   };
 
-  const handleSearch = async (filters) => {
-  try {
-    const results = await searchMessages(filters);
-    setMessages(results);
-  } catch (err) {
-    setError('Erreur lors de la recherche.');
-    console.error(err);
-  }
-};
+  // Au montage, redirige si non connecté sinon charge
+  useEffect(() => {
+    if (!userID) {
+      navigate('/login');
+    } else {
+      fetchMessages();
+    }
+  }, [userID, navigate]);
 
+  // Recherche
+  const handleSearch = async (filters) => {
+    try {
+      const results = await searchMessages(filters);
+      setMessages(results);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Déconnexion
   const handleLogout = () => {
     localStorage.clear();
     navigate('/login');
   };
 
-  // Création d'un nouveau message principal
+  // Création de message
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -60,7 +63,6 @@ const MainPage = () => {
       setError('Le titre et le contenu sont obligatoires');
       return;
     }
-
     try {
       const res = await fetch('http://localhost:3000/api/messages', {
         method: 'POST',
@@ -73,12 +75,10 @@ const MainPage = () => {
           answeredMessageID: null,
         }),
       });
-
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.message || 'Erreur lors de la création du message');
       }
-
       setTitle('');
       setContent('');
       fetchMessages();
@@ -87,33 +87,24 @@ const MainPage = () => {
     }
   };
 
-  // Création d'une réponse à un message
-  const handleReplySubmit = async (messageID, parentTitle) => {
-    if (!replyContent.trim()) {
-      setError('Le contenu de la réponse est obligatoire');
-      return;
-    }
-
-    const replyTitle = `RE: ${parentTitle}`;
-
+  // Envoi d'une réponse
+  const handleReplySubmit = async (messageID) => {
     try {
       const res = await fetch('http://localhost:3000/api/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userID,
-          title: replyTitle,
+          title: `RE: ${messages.find(m => m._id === messageID)?.title || ''}`,
           content: replyContent,
           forumID: 'open',
           answeredMessageID: messageID,
         }),
       });
-
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.message || 'Erreur lors de la création de la réponse');
       }
-
       setReplyContent('');
       setReplyingTo(null);
       fetchMessages();
@@ -122,14 +113,15 @@ const MainPage = () => {
     }
   };
 
-
   return (
-    <div>
-      <Header role={role} />
+    <div className="main-page">
+      <Header role={role} onLogout={handleLogout} />
 
-      <main style={{ padding: 10 }}>
+      <main className="main-content">
+        {error && <p className="error">{error}</p>}
+
         <h2>Créer un nouveau message</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="message-form">
           <input
             type="text"
             placeholder="Titre"
@@ -137,48 +129,41 @@ const MainPage = () => {
             onChange={(e) => setTitle(e.target.value)}
             required
           />
-          <br /><header style={{ display: 'flex', justifyContent: 'space-between', padding: 10 }}>
-      </header>
           <textarea
             placeholder="Contenu"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
             rows={4}
-            cols={50}
           />
-          <br />
           <button type="submit">Publier</button>
         </form>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        
         <h2>Messages du forum ouvert</h2>
-        
         <SearchBar onSearch={handleSearch} />
 
         {messages.length === 0 ? (
           <p>Aucun message pour le moment.</p>
         ) : (
-          <ul>
+          <ul className="message-list">
             {messages.map((msg) => (
-              <li key={msg._id || msg.messageID} style={{ marginBottom: 20 }}>
-                <strong>{msg.title}</strong> par {msg.userID?.identifier || "Utilisateur Inconnu"} <br />
-                {msg.content}
+              <li key={msg._id || msg.messageID} className="message-item">
+                <div className="message-content">
+                  <strong>{msg.title}</strong> par {msg.userID?.identifier || 'Inconnu'}
+                  <p>{msg.content}</p>
+                </div>
 
-                <div style={{ marginTop: 8 }}>
+                <div className="reply-section">
                   {replyingTo === msg._id ? (
                     <>
                       <textarea
                         rows={3}
-                        cols={50}
                         value={replyContent}
                         onChange={(e) => setReplyContent(e.target.value)}
                         placeholder="Votre réponse..."
                       />
-                      <br />
-                      <button onClick={() => handleReplySubmit(msg._id, msg.title)}>Envoyer réponse</button>
-                      <button onClick={() => { setReplyingTo(null); setReplyContent(''); }} style={{ marginLeft: 8 }}>
+                      <button onClick={() => handleReplySubmit(msg._id)}>Envoyer réponse</button>
+                      <button onClick={() => { setReplyingTo(null); setReplyContent(''); }}>
                         Annuler
                       </button>
                     </>

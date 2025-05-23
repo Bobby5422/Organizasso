@@ -6,8 +6,8 @@ export const AuthProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [userID, setUserID] = useState(null);
   const [role, setRole] = useState(null);
+  const [loading, setLoading] = useState(true); // 👈
 
-  // Charger la connexion au démarrage (localStorage)
   useEffect(() => {
     const storedConnected = localStorage.getItem('isConnected');
     const storedUserID = localStorage.getItem('userID');
@@ -18,9 +18,9 @@ export const AuthProvider = ({ children }) => {
       setUserID(storedUserID);
       setRole(storedRole);
     }
+    setLoading(false); // 👈
   }, []);
 
-  // Sync localStorage quand ça change
   useEffect(() => {
     localStorage.setItem('isConnected', isConnected ? 'true' : 'false');
     if (userID) localStorage.setItem('userID', userID);
@@ -29,11 +29,14 @@ export const AuthProvider = ({ children }) => {
     else localStorage.removeItem('role');
   }, [isConnected, userID, role]);
 
+  if (loading) return null; // 👈 Ne rend rien tant que localStorage n'est pas chargé
+
   return (
     <AuthContext.Provider value={{ isConnected, setIsConnected, userID, setUserID, role, setRole }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
 
 export const useAuth = () => useContext(AuthContext);

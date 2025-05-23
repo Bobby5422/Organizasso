@@ -14,6 +14,7 @@ const Header = ({ role }) => {
   const isOnAdminPage = location.pathname === '/admin';
   const isOnMainPage = location.pathname === '/main';
   const isOnProfilePage = location.pathname === '/profile';
+  const isOnRestrictedForum = location.pathname === '/restricted';
 
   return (
     <header>
@@ -29,14 +30,14 @@ const Header = ({ role }) => {
           <button onClick={() => navigate('/profile')}>Profil</button>
         )}
 
-        {role === 'admin' && (
+        {role === 'admin' && isOnMainPage && (
           <button onClick={() => navigate('/restricted')}>
             Forum Restreint
           </button>
         )}
 
         {/* Affiche Admin Dashboard seulement si on n'est pas déjà dessus */}
-        {role === 'admin' && !isOnAdminPage && !isOnProfilePage && (
+        {role === 'admin' && isOnMainPage && (
           <button onClick={() => navigate('/admin')}>Admin Dashboard</button>
         )}
 

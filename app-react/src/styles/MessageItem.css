@@ -1,0 +1,84 @@
+/* case principale */
+.message-item {
+  border: 1px solid var(--color-white);
+  border-radius: 0.25rem;
+  padding: var(--space-2);
+  margin-bottom: var(--space-2);
+  background: var(--color-black);
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* titre & méta */
+.message-title {
+  display: block;
+  font-size: 1.25rem;
+  margin-bottom: var(--space-1);
+  color: var(--color-white);
+}
+.message-meta {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: var(--space-1);
+}
+
+/* contenu du message */
+.message-body {
+  margin: 0;
+  color: var(--color-white);
+}
+
+/* section réponse */
+.reply-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* textarea */
+.reply-textarea {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--color-white);
+  border-radius: 0.25rem;
+  padding: var(--space-1);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  resize: vertical;
+  outline: none;
+}
+
+/* conteneur des boutons de réponse */
+.reply-buttons {
+  display: flex;
+  gap: var(--space-1);
+  justify-content: flex-end;
+}
+
+/* styles génériques pour les boutons du composant */
+.reply-section .button {
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-accent);
+  color: var(--color-white);
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+
+/* bouton unique "Répondre" */
+.reply-toggle {
+  align-self: flex-start;
+  padding: var(--space-1) var(--space-2);
+}
+
+/* bouton envoyer + annuler */
+.reply-send { }
+.reply-cancel {
+  background: rgba(255,255,255,0.1);
+}
+.reply-cancel:hover {
+  background: rgba(255,255,255,0.2);
+}

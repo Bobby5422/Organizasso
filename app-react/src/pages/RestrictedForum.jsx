@@ -5,7 +5,6 @@ import SearchBar from '../components/SearchBar';
 import MessageForm from '../components/MessageForm';
 import MessageItem from '../components/MessageItem';
 import { getMessages, searchMessages, createMessage } from '../services/api';
-
 import '../styles/RestrictedForum.css';
 
 const RestrictedForum = () => {
@@ -24,6 +23,7 @@ const RestrictedForum = () => {
       return;
     }
     fetchMessages();
+    // eslint-disable-next-line
   }, [role, navigate]);
 
   const fetchMessages = async () => {
@@ -95,36 +95,43 @@ const RestrictedForum = () => {
   };
 
   return (
-    <div className="restricted-forum">
+    <div className="restricted-forum-content">
       <Header role={role} onLogout={handleLogout} />
+      <div className="restricted-forum">
+        <main className="main-content">
+          {/* Colonne de gauche : création message */}
+          <section className="left-col">
+            <MessageForm onSubmit={handleNewMessageSubmit} />
+          </section>
 
-      <main className="main-content" style={{ padding: 10 }}>
-        <h2>Forum restreint (admin)</h2>
-
-        <MessageForm onSubmit={handleNewMessageSubmit} />
-
-        <SearchBar onSearch={handleSearch} />
-
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-
-        {messages.length === 0 ? (
-          <p>Aucun message pour le moment.</p>
-        ) : (
-          <ul className="message-list">
-            {messages.map(msg => (
-              <MessageItem
-                key={msg._id}
-                msg={msg}
-                replyingTo={replyingTo}
-                setReplyingTo={setReplyingTo}
-                replyContent={replyContent}
-                setReplyContent={setReplyContent}
-                handleReplySubmit={handleReplySubmit}
-              />
-            ))}
-          </ul>
-        )}
-      </main>
+          {/* Colonne de droite : search bar + messages */}
+          <section className="right-col">
+            <h2>Forum restreint (admin)</h2>
+            <div className="search-bar-container">
+              <SearchBar onSearch={handleSearch} />
+            </div>
+            {error && <p className="error">{error}</p>}
+            <ul className="message-list">
+              {messages.length === 0 ? (
+                <li className="no-message">Aucun message pour le moment.</li>
+              ) : (
+                messages.map(msg => (
+                  <li key={msg._id}>
+                    <MessageItem
+                      msg={msg}
+                      replyingTo={replyingTo}
+                      setReplyingTo={setReplyingTo}
+                      replyContent={replyContent}
+                      setReplyContent={setReplyContent}
+                      handleReplySubmit={handleReplySubmit}
+                    />
+                  </li>
+                ))
+              )}
+            </ul>
+          </section>
+        </main>
+      </div>
     </div>
   );
 };

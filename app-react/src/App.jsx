@@ -55,7 +55,6 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* autres routes */}
         </Routes>
       </Router>
     </AuthProvider>

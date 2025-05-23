@@ -28,7 +28,7 @@ exports.getMessages = async (req, res) => {
 };
 
 exports.searchMessages = async (req, res) => {
-  const { keywords, author, fromDate, toDate, forumID } = req.body; // ajouter forumID
+  const { keywords, author, fromDate, toDate, forumID } = req.body; 
   const filter = {};
 
   if (keywords) {
@@ -36,7 +36,7 @@ exports.searchMessages = async (req, res) => {
     { content: { $regex: keywords, $options: 'i' } },
     { title: { $regex: keywords, $options: 'i' } }
   ];
-  delete filter.content; // pour éviter conflit
+  delete filter.content; 
   }
 
   if (forumID) {
@@ -51,10 +51,10 @@ exports.searchMessages = async (req, res) => {
 
   try {
     if (author) {
-      // Chercher l'userID correspondant au username (author)
+      // userID correspondant au username (author)
       const user = await User.findOne({ identifier: author });
       if (!user) {
-        // Pas d'utilisateur trouvé → pas de résultats
+        // pas de résultats
         return res.json([]);
       }
       filter.userID = user._id;

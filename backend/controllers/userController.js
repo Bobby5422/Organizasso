@@ -3,12 +3,10 @@ const User = require('../models/User');
 exports.register = async (req, res) => {
   const { identifier, email, password, role } = req.body;
   try {
-    // Vérifier si identifiant ou email existe déjà
     const existingUser = await User.findOne({
       $or: [{ identifier }, { email }]
     });
     if (existingUser) {
-      // Différencier le message si besoin
       if (existingUser.identifier === identifier) {
         return res.status(400).json({ error: 'Identifiant déjà utilisé' });
       }
@@ -22,7 +20,6 @@ exports.register = async (req, res) => {
     await user.save();
     res.status(201).json({ message: 'Inscription en attente de validation.' });
   } catch (err) {
-    // Gérer aussi les erreurs d'index unique venant de MongoDB (cas rare si check précédent raté)
     if (err.code === 11000) {
       const field = Object.keys(err.keyValue)[0];
       return res.status(400).json({ error: `${field} déjà utilisé` });

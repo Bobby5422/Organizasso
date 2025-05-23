@@ -4,9 +4,9 @@ const userCtrl = require('../controllers/userController');
 
 router.post('/register', userCtrl.register);
 router.post('/login', userCtrl.login);
-router.get('/pending', userCtrl.getPendingUsers);   // <-- avant :id
+router.get('/pending', userCtrl.getPendingUsers);
 router.get('/', userCtrl.getAllUsers);
-router.get('/:id', userCtrl.getProfile);             // <-- après
+router.get('/:id', userCtrl.getProfile);
 router.put('/:id/validate', userCtrl.validateUser);
 router.put('/:id/role', userCtrl.setUserRole);
 

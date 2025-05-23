@@ -88,11 +88,13 @@ const MainPage = () => {
   };
 
   // Création d'une réponse à un message
-  const handleReplySubmit = async (messageID) => {
+  const handleReplySubmit = async (messageID, parentTitle) => {
     if (!replyContent.trim()) {
       setError('Le contenu de la réponse est obligatoire');
       return;
     }
+
+    const replyTitle = `RE: ${parentTitle}`;
 
     try {
       const res = await fetch('http://localhost:3000/api/messages', {
@@ -100,7 +102,7 @@ const MainPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userID,
-          title: 'RE: ', // Optionnel : tu peux adapter ou demander un titre
+          title: replyTitle,
           content: replyContent,
           forumID: 'open',
           answeredMessageID: messageID,
@@ -119,6 +121,7 @@ const MainPage = () => {
       setError(err.message);
     }
   };
+
 
   return (
     <div>
@@ -174,7 +177,7 @@ const MainPage = () => {
                         placeholder="Votre réponse..."
                       />
                       <br />
-                      <button onClick={() => handleReplySubmit(msg._id)}>Envoyer réponse</button>
+                      <button onClick={() => handleReplySubmit(msg._id, msg.title)}>Envoyer réponse</button>
                       <button onClick={() => { setReplyingTo(null); setReplyContent(''); }} style={{ marginLeft: 8 }}>
                         Annuler
                       </button>

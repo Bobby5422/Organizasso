@@ -51,11 +51,13 @@ const RestrictedForum = () => {
     }
   };
 
-  const handleReplySubmit = async (messageID) => {
+  const handleReplySubmit = async (messageID, parentTitle) => {
     if (!replyContent.trim()) {
       setError('Contenu vide');
       return;
     }
+
+    const replyTitle = `RE: ${parentTitle}`;
 
     try {
       const res = await fetch('http://localhost:3000/api/messages', {
@@ -63,7 +65,7 @@ const RestrictedForum = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userID,
-          title: 'RE: ',
+          title: replyTitle,
           content: replyContent,
           forumID: 'closed',
           answeredMessageID: messageID,
@@ -154,7 +156,7 @@ const RestrictedForum = () => {
                     onChange={(e) => setReplyContent(e.target.value)}
                     rows={3}
                   />
-                  <button onClick={() => handleReplySubmit(msg._id)}>Envoyer</button>
+                  <button onClick={() => handleReplySubmit(msg._id, msg.title)}>Envoyer</button>
                   <button onClick={() => setReplyingTo(null)}>Annuler</button>
                 </>
               ) : (

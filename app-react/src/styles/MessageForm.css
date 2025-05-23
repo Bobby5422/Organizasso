@@ -1,38 +1,74 @@
+/* src/styles/MessageForm.css */
+
+/* On reprend le style de .search-bar pour le wrapper */
 .message-form {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--space-2);
+
   border: 1px solid var(--color-white);
   border-radius: 0.25rem;
-  padding: var(--space-1);
-  max-width: 100%;
+  background: var(--color-black);
+  padding: var(--space-2);
+
+  max-width: 800px;    /* ajustable */
+  margin: var(--space-3) auto;
 }
 
-.message-form input {
+/* Titre intégré dans la case */
+.message-form__title {
+  margin: 0 0 var(--space-2);
+  color: var(--color-white);
+  font-size: 1.5rem;
+}
+
+/* Conteneur des champs en ligne */
+.message-form__fields {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+
+/* Champ Titre : flex pour occuper l’espace restant, hauteur réduite */
+.message-form__input {
   flex: 1;
-  border: none;
+  height: 2rem;              /* hauteur plus petite */
   background: transparent;
-  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-white);
+  border-radius: 0.25rem;
   color: var(--color-white);
   font-family: var(--font-sans);
-  font-size: 1rem;
+  padding: var(--space-1);
   outline: none;
 }
 
-.message-form button {
+/* Zone de texte : plus grande */
+.message-form__textarea {
+  flex: 2;
+  min-height: 5rem;          /* hauteur augmentée */
+  background: transparent;
+  border: 1px solid var(--color-white);
+  border-radius: 0.25rem;
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  padding: var(--space-1);
+  resize: vertical;
+  outline: none;
+}
+
+/* Bouton aligné à droite, en dehors du flow des champs */
+.message-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-2);
+}
+
+/* Bouton identique aux autres .button */
+.message-form__actions button {
   padding: var(--space-1) var(--space-2);
   background: var(--color-accent);
   color: var(--color-white);
   border: none;
   border-radius: 0.25rem;
   cursor: pointer;
-  font-family: var(--font-sans);
-  margin-left: var(--space-1);
-}
-
-.message-form input:focus {
-  outline: none;
-}
-
-.message-form button:hover {
-  opacity: 0.9;
 }

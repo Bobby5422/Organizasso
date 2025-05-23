@@ -66,3 +66,9 @@ header > div:last-child button {
 header hr {
   display: none;
 }
+
+.logo {
+  height: 50px;
+  margin-right: 10px;
+  vertical-align: middle;
+}

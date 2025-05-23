@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+// app-react/src/components/MessageForm.jsx
 
+import React, { useState } from 'react';
 import '../styles/MessageForm.css';
 
 const MessageForm = ({ onSubmit }) => {
@@ -8,14 +9,16 @@ const MessageForm = ({ onSubmit }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (!title || !content) return;
+    if (!title.trim() || !content.trim()) return;
     onSubmit({ title, content });
     setTitle('');
     setContent('');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="message-form">
+      <h2>Créer un nouveau message</h2>
+
       <input
         type="text"
         placeholder="Titre"
@@ -23,6 +26,7 @@ const MessageForm = ({ onSubmit }) => {
         onChange={e => setTitle(e.target.value)}
         required
       />
+
       <textarea
         placeholder="Contenu"
         rows={4}
@@ -30,6 +34,7 @@ const MessageForm = ({ onSubmit }) => {
         onChange={e => setContent(e.target.value)}
         required
       />
+
       <button type="submit">Publier</button>
     </form>
   );

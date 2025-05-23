@@ -6,7 +6,7 @@ export const AuthProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [userID, setUserID] = useState(null);
   const [role, setRole] = useState(null);
-  const [loading, setLoading] = useState(true); // 👈
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const storedConnected = localStorage.getItem('isConnected');
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
       setUserID(storedUserID);
       setRole(storedRole);
     }
-    setLoading(false); // 👈
+    setLoading(false); 
   }, []);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     else localStorage.removeItem('role');
   }, [isConnected, userID, role]);
 
-  if (loading) return null; // 👈 Ne rend rien tant que localStorage n'est pas chargé
+  if (loading) return null;
 
   return (
     <AuthContext.Provider value={{ isConnected, setIsConnected, userID, setUserID, role, setRole }}>

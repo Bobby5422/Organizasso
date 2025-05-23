@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/Header.css';
+import logo from '../assets/logo.png';
 
 const Header = ({ role }) => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const Header = ({ role }) => {
 
   return (
     <header>
-      <div>🚀 Organiz’asso</div>
+      <img src={logo} alt="Logo Organiz'asso" className="logo" />
       <h1>Organiz’asso</h1>
       <div>
         {!isOnMainPage && (

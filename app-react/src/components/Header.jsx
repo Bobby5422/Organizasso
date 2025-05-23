@@ -29,6 +29,12 @@ const Header = ({ role }) => {
           <button onClick={() => navigate('/profile')}>Profil</button>
         )}
 
+        {role === 'admin' && (
+          <button onClick={() => navigate('/restricted')}>
+            Forum Restreint
+          </button>
+        )}
+
         {/* Affiche Admin Dashboard seulement si on n'est pas déjà dessus */}
         {role === 'admin' && !isOnAdminPage && !isOnProfilePage && (
           <button onClick={() => navigate('/admin')}>Admin Dashboard</button>

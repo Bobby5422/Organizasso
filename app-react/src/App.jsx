@@ -8,6 +8,7 @@ import MainPage from './pages/MainPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboard from './pages/AdminDashboard';
 import ProfilePage from './pages/ProfilePage'; 
+import RestrictedForum from './pages/RestrictedForum';
 
 const PrivateRoute = ({ children }) => {
   const { isConnected } = useAuth();
@@ -43,6 +44,14 @@ function App() {
             element={
               <PrivateRoute>
                 <ProfilePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/restricted"
+            element={
+              <PrivateRoute>
+                <RestrictedForum />
               </PrivateRoute>
             }
           />

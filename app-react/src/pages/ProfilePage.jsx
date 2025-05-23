@@ -25,7 +25,6 @@ function ProfilePage() {
     }
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
       const userData = await getUserProfile(userID);

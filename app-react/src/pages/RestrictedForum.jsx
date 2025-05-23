@@ -116,16 +116,15 @@ const RestrictedForum = () => {
                 <li className="no-message">Aucun message pour le moment.</li>
               ) : (
                 messages.map(msg => (
-                  <li key={msg._id}>
-                    <MessageItem
+                  <MessageItem
+                      key={msg._id}
                       msg={msg}
                       replyingTo={replyingTo}
                       setReplyingTo={setReplyingTo}
                       replyContent={replyContent}
                       setReplyContent={setReplyContent}
                       handleReplySubmit={handleReplySubmit}
-                    />
-                  </li>
+                  />
                 ))
               )}
             </ul>

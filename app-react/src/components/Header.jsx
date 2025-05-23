@@ -1,28 +1,39 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom'; // <-- ajout de useLocation
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/Header.css';
 
 const Header = ({ role }) => {
   const navigate = useNavigate();
-  const location = useLocation(); // <-- récupère la route actuelle
+  const location = useLocation();
 
   const handleLogout = () => {
     localStorage.clear();
     navigate('/login');
   };
 
-  const isOnAdminPage = location.pathname === '/admin'; // <-- vérifie la route
+  const isOnAdminPage = location.pathname === '/admin';
+  const isOnMainPage = location.pathname === '/main';
+  const isOnProfilePage = location.pathname === '/profile';
 
   return (
     <header>
       <div>🚀 Organiz’asso</div>
       <h1>Organiz’asso</h1>
       <div>
-        <button onClick={() => navigate('/main')}>Accueil</button>
+        {!isOnMainPage && (
+          <button onClick={() => navigate('/main')}>Accueil</button>
+        )} 
+          
+        {/* Affiche le bouton Profil seulement sur la page /main */}
+        {isOnMainPage && (
+          <button onClick={() => navigate('/profile')}>Profil</button>
+        )}
+
         {/* Affiche Admin Dashboard seulement si on n'est pas déjà dessus */}
-        {role === 'admin' && !isOnAdminPage && (
+        {role === 'admin' && !isOnAdminPage && !isOnProfilePage && (
           <button onClick={() => navigate('/admin')}>Admin Dashboard</button>
         )}
+
         <button onClick={handleLogout}>Se déconnecter</button>
       </div>
     </header>

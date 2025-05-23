@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
 
 import '../styles/MainPage.css';
+
 
 const MainPage = () => {
   const [messages, setMessages] = useState([]);
@@ -108,18 +110,7 @@ const MainPage = () => {
 
   return (
     <div>
-      <header style={{ display: 'flex', justifyContent: 'space-between', padding: 10 }}>
-        <div>🚀 Organiz’asso</div>
-        <h1 style={{ margin: 0 }}>Organiz’asso</h1>
-        <div>
-          {role === 'admin' && (
-            <button onClick={() => navigate('/admin')} style={{ marginRight: 10 }}>
-              Admin Dashboard
-            </button>
-          )}
-          <button onClick={handleLogout}>Se déconnecter</button>
-        </div>
-      </header>
+      <Header role={role} />
 
       <main style={{ padding: 10 }}>
         <h2>Créer un nouveau message</h2>
@@ -131,7 +122,8 @@ const MainPage = () => {
             onChange={(e) => setTitle(e.target.value)}
             required
           />
-          <br />
+          <br /><header style={{ display: 'flex', justifyContent: 'space-between', padding: 10 }}>
+      </header>
           <textarea
             placeholder="Contenu"
             value={content}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import { registerUser } from '../services/api'; 
+import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../services/api';
 
 import '../styles/RegisterPage.css';
 
@@ -13,7 +13,7 @@ const RegisterPage = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -41,15 +41,16 @@ const RegisterPage = () => {
   };
 
   return (
-    <div>
+    <div className="register-container">
       <h1>Inscription</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>{success}</p>}
+      {error && <p className="register-error">{error}</p>}
+      {success && <p className="register-success">{success}</p>}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Identifiant :</label>
+          <label htmlFor="identifier">Identifiant :</label>
           <input
             type="text"
+            id="identifier"
             name="identifier"
             value={formData.identifier}
             onChange={handleChange}
@@ -57,9 +58,10 @@ const RegisterPage = () => {
           />
         </div>
         <div>
-          <label>Email :</label>
+          <label htmlFor="email">Email :</label>
           <input
             type="email"
+            id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
@@ -67,9 +69,10 @@ const RegisterPage = () => {
           />
         </div>
         <div>
-          <label>Mot de passe :</label>
+          <label htmlFor="password">Mot de passe :</label>
           <input
             type="password"
+            id="password"
             name="password"
             value={formData.password}
             onChange={handleChange}

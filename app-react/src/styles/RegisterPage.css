@@ -1,0 +1,100 @@
+/* RegisterPage.css */
+
+/* Conteneur principal */
+.register-container {
+  max-width: 400px;
+  margin: 4rem auto;
+  background: rgba(20, 20, 20, 0.97);
+  padding: var(--space-3);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register-container h1 {
+  margin-bottom: var(--space-2);
+  color: var(--color-white);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.register-container form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.register-container form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.register-container label {
+  color: var(--color-white);
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.2px;
+}
+
+.register-container input[type="text"],
+.register-container input[type="email"],
+.register-container input[type="password"] {
+  width: 100%;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid #333;
+  background: #181818;
+  color: var(--color-white);
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  transition: border-color 0.2s;
+}
+
+.register-container input:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.register-container button[type="submit"] {
+  margin-top: var(--space-1);
+  width: 100%;
+  font-size: 1.1rem;
+  background: var(--color-accent);
+  color: var(--color-white);
+  padding: var(--space-1) var(--space-2);
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: opacity 0.15s;
+}
+
+.register-container button[type="submit"]:hover {
+  opacity: 0.95;
+}
+
+/* Message d’erreur */
+.register-error {
+  color: #ff4d4f;
+  background: rgba(60,0,0,0.22);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  margin: 0.5rem 0 0 0;
+  font-size: 0.98rem;
+  text-align: center;
+}
+
+/* Message de succès */
+.register-success {
+  color: #14ff84;
+  background: rgba(20,60,20,0.22);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  margin: 0.5rem 0 0 0;
+  font-size: 0.98rem;
+  text-align: center;
+}

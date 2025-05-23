@@ -38,7 +38,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h1>Connexion</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -55,14 +55,14 @@ const LoginPage = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p className="login-error">{error}</p>}
         <button type="submit" disabled={loading}>
           {loading ? 'Connexion...' : 'Se connecter'}
         </button>
       </form>
       <p>
         Pas encore inscrit ?{' '}
-        <Link to="/register" style={{ color: 'blue', textDecoration: 'underline' }}>
+        <Link to="/register">
           Créez un compte
         </Link>
       </p>

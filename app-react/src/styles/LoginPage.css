@@ -1,0 +1,87 @@
+/* LoginPage.css */
+
+/* Centrage vertical et horizontal */
+.login-container {
+  max-width: 360px;
+  margin: 4rem auto;
+  background: rgba(20, 20, 20, 0.97);
+  padding: var(--space-3);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-container h1 {
+  margin-bottom: var(--space-2);
+  color: var(--color-white);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.login-container form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+  width: 100%;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid #333;
+  background: #181818;
+  color: var(--color-white);
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  transition: border-color 0.2s;
+}
+
+.login-container input:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.login-container button[type="submit"] {
+  margin-top: var(--space-1);
+  width: 100%;
+  font-size: 1.1rem;
+  background: var(--color-accent);
+  color: var(--color-white);
+  padding: var(--space-1) var(--space-2);
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: opacity 0.15s;
+}
+
+.login-container button[type="submit"]:hover {
+  opacity: 0.95;
+}
+
+.login-container p {
+  margin-top: var(--space-2);
+  text-align: center;
+  color: var(--color-white);
+  font-size: 1rem;
+}
+
+.login-container p a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* Message d’erreur */
+.login-container .login-error {
+  color: #ff4d4f;
+  background: rgba(60,0,0,0.22);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  margin: 0.5rem 0 0 0;
+  font-size: 0.98rem;
+  text-align: center;
+}

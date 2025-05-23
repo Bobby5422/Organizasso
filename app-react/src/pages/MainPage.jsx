@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import '../styles/MainPage.css';
+
 const MainPage = () => {
   const [messages, setMessages] = useState([]);
   const [content, setContent] = useState('');

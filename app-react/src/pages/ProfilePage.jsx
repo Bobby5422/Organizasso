@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getUserProfile, getMessages, deleteMessage } from '../services/api';
 
+import '../styles/ProfilePage.css';
+
 function ProfilPage() {
   const { id } = useParams(); // ID de l'utilisateur depuis l'URL
   const [user, setUser] = useState(null);

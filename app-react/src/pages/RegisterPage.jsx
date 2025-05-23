@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { registerUser } from '../services/api'; // vérifie chemin correct
 
+import '../styles/RegisterPage.css';
+
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     identifier: '',

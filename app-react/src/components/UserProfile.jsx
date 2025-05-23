@@ -1,5 +1,7 @@
 import React from 'react';
 
+import '../styles/UserProfile.css';
+
 const UserProfile = ({ user, messages, onDeleteMessage }) => {
   return (
     <div>

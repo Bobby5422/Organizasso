@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import '../styles/MessageItem.css';
+
 const MessageItem = ({ message, onReply }) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [replyContent, setReplyContent] = useState('');

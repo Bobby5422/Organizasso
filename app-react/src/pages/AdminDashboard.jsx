@@ -4,6 +4,8 @@ import UserList from '../components/UserList';
 import { getPendingUsers, getAllUsers, validateUser, setUserRole } from '../services/api';
 import { useAuth } from '../context/AuthContext';  // <- import du contexte
 
+import '../styles/AdminDashboard.css';
+
 const AdminDashboard = () => {
   const { userID, role } = useAuth(); // récupère l'admin connecté
   const [pendingUsers, setPendingUsers] = useState([]);

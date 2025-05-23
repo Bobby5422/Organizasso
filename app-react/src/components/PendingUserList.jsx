@@ -1,5 +1,7 @@
 import React from 'react';
 
+import '../styles/PendingUserList.css';
+
 const PendingUserList = ({ users, onValidate }) => {
   return (
     <div>

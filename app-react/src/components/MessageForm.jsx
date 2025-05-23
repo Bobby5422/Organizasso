@@ -1,47 +1,52 @@
-import React, { useState } from 'react'
-import '../styles/MessageForm.css'
+import React, { useState } from 'react';
+import '../styles/MessageForm.css'; // Tu peux ajouter des styles dédiés si besoin
 
 const MessageForm = ({ onSubmit }) => {
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = e => {
-    e.preventDefault()
-    if (!title.trim() || !content.trim()) return
-    onSubmit({ title, content })
-    setTitle('')
-    setContent('')
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!title.trim() || !content.trim()) {
+      setError('Le titre et le contenu sont obligatoires');
+      return;
+    }
+
+    try {
+      await onSubmit({ title, content });
+      setTitle('');
+      setContent('');
+    } catch (err) {
+      setError(err.message || 'Une erreur est survenue.');
+    }
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="message-form">
-      <h2 className="message-form__title">Créer un nouveau message</h2>
-
-      <div className="message-form__fields">
+    <div className="message-form-container">
+      {error && <p className="error">{error}</p>}
+      <h2>Créer un nouveau message</h2>
+      <form onSubmit={handleSubmit} className="message-form">
         <input
           type="text"
-          className="message-form__input"
           placeholder="Titre"
           value={title}
-          onChange={e => setTitle(e.target.value)}
+          onChange={(e) => setTitle(e.target.value)}
           required
         />
-
         <textarea
-          className="message-form__textarea"
           placeholder="Contenu"
-          rows={4}
           value={content}
-          onChange={e => setContent(e.target.value)}
+          onChange={(e) => setContent(e.target.value)}
           required
+          rows={4}
         />
-      </div>
-
-      <div className="message-form__actions">
         <button type="submit">Publier</button>
-      </div>
-    </form>
-  )
-}
+      </form>
+    </div>
+  );
+};
 
-export default MessageForm
+export default MessageForm;

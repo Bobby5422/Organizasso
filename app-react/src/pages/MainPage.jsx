@@ -1,4 +1,3 @@
-// src/pages/MainPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,6 +6,8 @@ const MainPage = () => {
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
+  const [replyingTo, setReplyingTo] = useState(null);  // ID du message auquel on répond
+  const [replyContent, setReplyContent] = useState('');
   const role = localStorage.getItem('role');
   const userID = localStorage.getItem('userID');
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ const MainPage = () => {
     navigate('/login');
   };
 
+  // Création d'un nouveau message principal
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -63,6 +65,39 @@ const MainPage = () => {
 
       setTitle('');
       setContent('');
+      fetchMessages();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Création d'une réponse à un message
+  const handleReplySubmit = async (messageID) => {
+    if (!replyContent.trim()) {
+      setError('Le contenu de la réponse est obligatoire');
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:3000/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userID,
+          title: 'RE: ', // Optionnel : tu peux adapter ou demander un titre
+          content: replyContent,
+          forumID: 'open',
+          answeredMessageID: messageID,
+        }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.message || 'Erreur lors de la création de la réponse');
+      }
+
+      setReplyContent('');
+      setReplyingTo(null);
       fetchMessages();
     } catch (err) {
       setError(err.message);
@@ -115,10 +150,30 @@ const MainPage = () => {
         ) : (
           <ul>
             {messages.map((msg) => (
-              <li key={msg._id || msg.messageID}>
-                <strong>{msg.title}</strong> par {msg.userID} <br />
+              <li key={msg._id || msg.messageID} style={{ marginBottom: 20 }}>
+                <strong>{msg.title}</strong> par {msg.userID?.identifier || "Utilisateur Inconnu"} <br />
                 {msg.content}
-                {/* Tu peux ajouter ici un bouton "Répondre" */}
+
+                <div style={{ marginTop: 8 }}>
+                  {replyingTo === msg._id ? (
+                    <>
+                      <textarea
+                        rows={3}
+                        cols={50}
+                        value={replyContent}
+                        onChange={(e) => setReplyContent(e.target.value)}
+                        placeholder="Votre réponse..."
+                      />
+                      <br />
+                      <button onClick={() => handleReplySubmit(msg._id)}>Envoyer réponse</button>
+                      <button onClick={() => { setReplyingTo(null); setReplyContent(''); }} style={{ marginLeft: 8 }}>
+                        Annuler
+                      </button>
+                    </>
+                  ) : (
+                    <button onClick={() => setReplyingTo(msg._id)}>Répondre</button>
+                  )}
+                </div>
               </li>
             ))}
           </ul>

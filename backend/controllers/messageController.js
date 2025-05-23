@@ -22,7 +22,7 @@ exports.deleteMessage = async (req, res) => {
 
 exports.getMessages = async (req, res) => {
   const { forumID } = req.query;
-  const messages = await Message.find({ forumID }).sort({ date: -1 });
+  const messages = await Message.find({ forumID }).sort({ date: -1 }).populate('userID', 'identifier');
   res.json(messages);
 };
 

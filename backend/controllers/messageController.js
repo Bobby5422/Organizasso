@@ -32,7 +32,11 @@ exports.searchMessages = async (req, res) => {
   const filter = {};
 
   if (keywords) {
-    filter.content = { $regex: keywords, $options: 'i' };
+  filter.$or = [
+    { content: { $regex: keywords, $options: 'i' } },
+    { title: { $regex: keywords, $options: 'i' } }
+  ];
+  delete filter.content; // pour éviter conflit
   }
 
   if (forumID) {

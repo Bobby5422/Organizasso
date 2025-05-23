@@ -27,7 +27,7 @@ const SearchBar = ({ onSearch }) => {
       />
       <input
         type="text"
-        placeholder="Auteur (ID ou nom)"
+        placeholder="Auteur (username)"
         value={author}
         onChange={(e) => setAuthor(e.target.value)}
       />

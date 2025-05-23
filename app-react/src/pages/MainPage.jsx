@@ -113,16 +113,15 @@ const MainPage = () => {
                   <li className="no-message">Aucun message pour le moment.</li>
                 ) : (
                   messages.map((msg) => (
-                    <li key={msg._id}>
-                      <MessageItem
-                        msg={msg}
-                        replyingTo={replyingTo}
-                        setReplyingTo={setReplyingTo}
-                        replyContent={replyContent}
-                        setReplyContent={setReplyContent}
-                        handleReplySubmit={handleReplySubmit}
-                      />
-                    </li>
+                    <MessageItem
+                      key={msg._id}
+                      msg={msg}
+                      replyingTo={replyingTo}
+                      setReplyingTo={setReplyingTo}
+                      replyContent={replyContent}
+                      setReplyContent={setReplyContent}
+                      handleReplySubmit={handleReplySubmit}
+                    />
                   ))
                 )}
               </ul>

@@ -1,3 +1,6 @@
+/* app-react/src/styles/Global.css */
+
+/* 1) Reset & Box-Sizing */
 *,
 *::before,
 *::after {
@@ -6,41 +9,43 @@
   padding: 0;
 }
 
+/* 2) Variables de design */
 :root {
-  --color-black:   #000000;
-  --color-white:   #FFFFFF;
-  --color-accent:  #C8102E;
+  /* Couleurs principales */
+  --color-black:    #000000;
+  --color-white:    #FFFFFF;
+  --color-accent:   #C8102E;
   --color-gray-100: #F5F5F5;
   --color-gray-900: #333333;
 
-  --font-sans:  'Helvetica Neue', Arial, sans-serif;
-  --font-mono:  'Courier New', monospace;
-
+  /* Espacements */
   --space-1: 0.5rem;
   --space-2: 1rem;
   --space-3: 1.5rem;
   --space-4: 2rem;
+
+  /* Police par défaut */
+  --font-sans: 'Helvetica Neue', Arial, sans-serif;
 }
 
+/* 3) Base globale */
 html {
-  font-size: 100%; 
+  font-size: 100%; /* 16px */
   scroll-behavior: smooth;
 }
-
 body {
-  background-color: var(--color-white);
-  color: var(--color-black);
+  background-color: var(--color-black);
+  color: var(--color-white);
   font-family: var(--font-sans);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
+/* 4) Titres & liens */
 h1, h2, h3, h4, h5, h6 {
-  color: var(--color-black);
   margin-bottom: var(--space-2);
   line-height: 1.2;
 }
-
 a {
   color: var(--color-accent);
   text-decoration: none;
@@ -50,6 +55,7 @@ a:focus {
   text-decoration: underline;
 }
 
+/* 5) Boutons génériques */
 button,
 .button {
   display: inline-block;
@@ -58,34 +64,44 @@ button,
   color: var(--color-white);
   border: none;
   border-radius: 0.25rem;
-  font-family: var(--font-sans);
   cursor: pointer;
+  font-family: var(--font-sans);
 }
 button:hover,
 .button:hover {
   opacity: 0.9;
 }
 
+/* 6) Listes, séparateurs & médias */
+ul, ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 hr {
   border: none;
   border-top: 1px solid var(--color-gray-100);
   margin: var(--space-4) 0;
 }
-ul, ol {
-  margin-left: var(--space-3);
-  margin-bottom: var(--space-3);
-}
-
 img, video {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-.container {
-  width: 90%;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: var(--space-4) 0;
+/* 7) Positionner “Se déconnecter” et “Admin Dashboard” */
+/*    en colonne, même largeur basée sur le plus long texte */
+header > div:last-child {
+  position: fixed;
+  top: var(--space-2);
+  right: var(--space-2);
+  display: inline-grid;
+  grid-template-columns: max-content; /* une colonne qui s'adapte au plus large */
+  grid-auto-rows: auto;               /* une ligne par bouton */
+  gap: var(--space-1);
+  z-index: 1000;
+}
+header > div:last-child .button {
+  width: 100%; /* chaque bouton prend 100% de la colonne */
+  text-align: center;
 }

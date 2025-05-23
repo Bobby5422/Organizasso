@@ -1,4 +1,5 @@
 const Message = require('../models/Message');
+const User = require('../models/User');
 
 exports.createMessage = async (req, res) => {
   const { userID, title, content, answeredMessageID, forumID } = req.body;
@@ -27,15 +28,15 @@ exports.getMessages = async (req, res) => {
 };
 
 exports.searchMessages = async (req, res) => {
-  const { keywords, author, fromDate, toDate } = req.body;
+  const { keywords, author, fromDate, toDate, forumID } = req.body; // ajouter forumID
   const filter = {};
 
   if (keywords) {
     filter.content = { $regex: keywords, $options: 'i' };
   }
 
-  if (author) {
-    filter.userID = author;
+  if (forumID) {
+    filter.forumID = forumID;
   }
 
   if (fromDate || toDate) {
@@ -45,12 +46,23 @@ exports.searchMessages = async (req, res) => {
   }
 
   try {
+    if (author) {
+      // Chercher l'userID correspondant au username (author)
+      const user = await User.findOne({ identifier: author });
+      if (!user) {
+        // Pas d'utilisateur trouvé → pas de résultats
+        return res.json([]);
+      }
+      filter.userID = user._id;
+    }
+
     const results = await Message.find(filter)
       .sort({ date: -1 })
-      .populate('userID', 'identifier'); // ✅ Ceci est ESSENTIEL pour afficher le nom
+      .populate('userID', 'identifier');
     res.json(results);
   } catch (err) {
     res.status(500).json({ error: 'Erreur lors de la recherche de messages' });
   }
 };
+
 

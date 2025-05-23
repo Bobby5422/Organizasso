@@ -3,11 +3,31 @@ const User = require('../models/User');
 exports.register = async (req, res) => {
   const { identifier, email, password, role } = req.body;
   try {
+    // Vérifier si identifiant ou email existe déjà
+    const existingUser = await User.findOne({
+      $or: [{ identifier }, { email }]
+    });
+    if (existingUser) {
+      // Différencier le message si besoin
+      if (existingUser.identifier === identifier) {
+        return res.status(400).json({ error: 'Identifiant déjà utilisé' });
+      }
+      if (existingUser.email === email) {
+        return res.status(400).json({ error: 'Email déjà utilisé' });
+      }
+    }
+
+    // Pas de doublon, on crée l'utilisateur
     const user = new User({ identifier, email, password, role, validate: false });
     await user.save();
     res.status(201).json({ message: 'Inscription en attente de validation.' });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    // Gérer aussi les erreurs d'index unique venant de MongoDB (cas rare si check précédent raté)
+    if (err.code === 11000) {
+      const field = Object.keys(err.keyValue)[0];
+      return res.status(400).json({ error: `${field} déjà utilisé` });
+    }
+    res.status(500).json({ error: 'Erreur serveur' });
   }
 };
 

@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import MessageForm from '../components/MessageForm';
 import MessageItem from '../components/MessageItem';
-import { searchMessages } from '../services/api';
+import { getMessages, searchMessages, createMessage } from '../services/api';
 
 import '../styles/RestrictedForum.css';
 
@@ -28,31 +28,20 @@ const RestrictedForum = () => {
 
   const fetchMessages = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/messages?forumID=closed');
-      if (!res.ok) throw new Error('Erreur de récupération');
-      const data = await res.json();
+      const data = await getMessages('closed');  // utilisation de la fonction importée
       setMessages(data);
-    } catch {
+      setError('');
+    } catch (err) {
       setError("Erreur lors du chargement.");
     }
   };
 
   const handleSearch = async (filters) => {
     try {
-      // On ajoute forumID closed dans les filtres
+      // Ajout de forumID 'closed' dans les filtres de recherche
       const results = await searchMessages({ ...filters, forumID: 'closed' });
-
-      // Si besoin, enrichir userID (si c'est une string)
-      const enriched = await Promise.all(results.map(async (msg) => {
-        if (typeof msg.userID === 'string') {
-          const res = await fetch(`http://localhost:3000/api/users/${msg.userID}`);
-          const userData = await res.json();
-          return { ...msg, userID: userData };
-        }
-        return msg;
-      }));
-
-      setMessages(enriched);
+      setMessages(results);
+      setError('');
     } catch {
       setError("Erreur de recherche.");
     }
@@ -65,22 +54,14 @@ const RestrictedForum = () => {
       return;
     }
     try {
-      const res = await fetch('http://localhost:3000/api/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userID,
-          title,
-          content,
-          forumID: 'closed',
-          answeredMessageID: null,
-        }),
+      await createMessage({
+        userID,
+        title,
+        content,
+        forumID: 'closed',
+        answeredMessageID: null,
       });
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.message || 'Erreur lors de la création du message');
-      }
-      fetchMessages();
+      await fetchMessages();
     } catch {
       setError("Erreur lors de la création du message");
     }
@@ -91,24 +72,18 @@ const RestrictedForum = () => {
       setError('Le contenu de la réponse ne peut pas être vide');
       return;
     }
-
     try {
-      const res = await fetch('http://localhost:3000/api/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userID,
-          title: `RE: ${messages.find(m => m._id === messageID)?.title || ''}`,
-          content: replyContent,
-          forumID: 'closed',
-          answeredMessageID: messageID,
-        }),
+      const parentMsg = messages.find(m => m._id === messageID);
+      await createMessage({
+        userID,
+        title: `RE: ${parentMsg?.title || ''}`,
+        content: replyContent,
+        forumID: 'closed',
+        answeredMessageID: messageID,
       });
-      if (!res.ok) throw new Error();
-
       setReplyContent('');
       setReplyingTo(null);
-      fetchMessages();
+      await fetchMessages();
     } catch {
       setError("Erreur d'envoi");
     }

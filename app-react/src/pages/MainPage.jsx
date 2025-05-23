@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import MessageForm from '../components/MessageForm';
-import MessageItem from '../components/MessageItem'; // <-- Import ici
-import { searchMessages } from '../services/api';
+import MessageItem from '../components/MessageItem';
+import { getMessages, searchMessages, createMessage } from '../services/api'; // <-- Import API ici
 import '../styles/MainPage.css';
 
 const MainPage = () => {
@@ -17,14 +17,14 @@ const MainPage = () => {
   const userID = localStorage.getItem('userID');
   const navigate = useNavigate();
 
+  // Récupérer les messages du forum ouvert
   const fetchMessages = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/messages?forumID=open');
-      if (!res.ok) throw new Error('Erreur de récupération');
-      const data = await res.json();
+      const data = await getMessages('open');  // Utilisation de la fonction importée
       setMessages(data);
     } catch (err) {
       console.error(err);
+      setError('Erreur lors du chargement des messages');
     }
   };
 
@@ -38,10 +38,12 @@ const MainPage = () => {
 
   const handleSearch = async (filters) => {
     try {
-      const results = await searchMessages(filters);
+      // Ajoute forumID 'open' pour filtrer uniquement le forum ouvert
+      const results = await searchMessages({ ...filters, forumID: 'open' });
       setMessages(results);
     } catch (err) {
       console.error(err);
+      setError('Erreur lors de la recherche');
     }
   };
 
@@ -51,46 +53,39 @@ const MainPage = () => {
   };
 
   const handleCreateMessage = async ({ title, content }) => {
-    const res = await fetch('http://localhost:3000/api/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    try {
+      await createMessage({
         userID,
         title,
         content,
         forumID: 'open',
         answeredMessageID: null,
-      }),
-    });
-    if (!res.ok) {
-      const errData = await res.json();
-      throw new Error(errData.message || 'Erreur lors de la création du message');
+      });
+      await fetchMessages();
+    } catch (err) {
+      setError(err.message || 'Erreur lors de la création du message');
     }
-    await fetchMessages();
   };
 
   const handleReplySubmit = async (messageID) => {
+    if (!replyContent.trim()) {
+      setError('Le contenu de la réponse est vide');
+      return;
+    }
     try {
-      const res = await fetch('http://localhost:3000/api/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userID,
-          title: `RE: ${messages.find(m => m._id === messageID)?.title || ''}`,
-          content: replyContent,
-          forumID: 'open',
-          answeredMessageID: messageID,
-        }),
+      const parentMsg = messages.find((m) => m._id === messageID);
+      await createMessage({
+        userID,
+        title: `RE: ${parentMsg?.title || ''}`,
+        content: replyContent,
+        forumID: 'open',
+        answeredMessageID: messageID,
       });
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.message || 'Erreur lors de la création de la réponse');
-      }
       setReplyContent('');
       setReplyingTo(null);
-      fetchMessages();
+      await fetchMessages();
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Erreur lors de l’envoi de la réponse');
     }
   };
 
@@ -104,13 +99,15 @@ const MainPage = () => {
         <h2>Messages du forum ouvert</h2>
         <SearchBar onSearch={handleSearch} />
 
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+
         {messages.length === 0 ? (
           <p>Aucun message pour le moment.</p>
         ) : (
           <ul className="message-list">
             {messages.map((msg) => (
               <MessageItem
-                key={msg._id || msg.messageID}
+                key={msg._id}
                 msg={msg}
                 replyingTo={replyingTo}
                 setReplyingTo={setReplyingTo}

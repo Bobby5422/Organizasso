@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // <-- Import
 import { registerUser } from '../services/api'; // vérifie chemin correct
 
 import '../styles/RegisterPage.css';
@@ -11,6 +12,8 @@ const RegisterPage = () => {
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  const navigate = useNavigate(); // <-- Initialise navigate
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,6 +31,14 @@ const RegisterPage = () => {
       } else {
         setSuccess('Inscription réussie ! Vous pouvez maintenant vous connecter.');
         setFormData({ identifier: '', email: '', password: '' });
+
+        // Redirection vers login après un délai court (optionnel)
+        setTimeout(() => {
+          navigate('/login');
+        }, 1500);
+        
+        // Ou redirection immédiate sans délai :
+        // navigate('/login');
       }
     } catch (err) {
       setError('Erreur réseau ou serveur');

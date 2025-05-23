@@ -1,62 +1,63 @@
-/* src/styles/AdminDashboard.css */
+/* AdminDashboard.css */
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+:root {
+  --header-height: calc(2 * var(--space-2) + 2.5rem);
+}
+
+.admin-dashboard-wrapper {
+  position: relative;
+  height: 100%;
+}
 
 .admin-dashboard {
-  padding: var(--space-2);
-  color: var(--color-white);
-}
-
-/* Titre centré sous le header */
-.admin-dashboard__title {
-  text-align: center;
-  margin: var(--space-2) 0;
-  font-size: 2rem;
-}
-
-/* Conteneur flex pour les deux colonnes */
-.admin-dashboard__lists {
+  position: absolute;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
-  gap: var(--space-4);
-  /* si trop étroit : colonne pliable */
-  flex-wrap: wrap;
+  gap: var(--space-2);
+  background: var(--color-black);
+  padding: var(--space-2);
+  box-sizing: border-box;
 }
 
-/* Styles communs aux deux sections */
-.admin-dashboard__pending,
-.admin-dashboard__users {
-  flex: 1 1 0; /* partagent l'espace à 50/50 */
+.dashboard-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   background: var(--color-black);
   border: 1px solid var(--color-white);
   border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.dashboard-column h2 {
+  margin: 0;
   padding: var(--space-2);
-  min-width: 300px; /* pour éviter un écrasement trop fort */
-}
-
-/* Titre spécifiques dans chaque section */
-.admin-dashboard__pending h3,
-.admin-dashboard__users h3 {
-  margin-top: 0;
-  margin-bottom: var(--space-2);
+  font-size: 1.5rem;
+  text-align: center;
   color: var(--color-white);
-  font-size: 1.25rem;
+  border-bottom: 1px solid var(--color-white);
+  flex: 0 0 auto;
 }
 
-/* Pour que la table dans UserList n'explose pas */
-.admin-dashboard__users table {
+/* --- ICI ON AJOUTE LE FLEX POUR CENTRER ET ÉTENDRE LE CONTENU --- */
+.dashboard-content {
+  flex: 1 1 auto;
+  padding: var(--space-2);
+  overflow: auto;
+  display: flex;
+  justify-content: center;  /* centre horizontalement */
+  align-items: flex-start;  /* positionne en haut */
+}
+
+/* on force l’enfant direct à 100% de la colonne */
+.dashboard-content > * {
   width: 100%;
-  border-collapse: collapse;
-}
-.admin-dashboard__users th,
-.admin-dashboard__users td {
-  border: 1px solid var(--color-white);
-  padding: var(--space-1);
-  text-align: left;
-}
-.admin-dashboard__users th {
-  background: rgba(255,255,255,0.1);
-}
-
-/* Boutons à l'intérieur gardent le style global */
-.admin-dashboard__pending button,
-.admin-dashboard__users button {
-  margin-top: var(--space-1);
 }

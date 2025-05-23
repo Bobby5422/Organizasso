@@ -1,4 +1,3 @@
-// src/pages/AdminDashboard.jsx
 import React, { useEffect, useState } from 'react'
 import PendingUserList from '../components/PendingUserList'
 import UserList from '../components/UserList'
@@ -55,23 +54,24 @@ const AdminDashboard = () => {
     }
   }
 
+  // Exclure l'admin courant de la liste de gestion
   const filteredUsers = allUsers.filter(u => !(role === 'admin' && u._id === userID))
 
   return (
-    <div className="admin-dashboard">
+    <div>
       <Header role={role} />
 
-      <h2 className="admin-dashboard__title">Admin Dashboard</h2>
-
-      <div className="admin-dashboard__lists">
-        <section className="admin-dashboard__pending">
+      <main className="admin-dashboard">
+        <section className="dashboard-column">
+          <h2>Utilisateurs en attente</h2>
           <PendingUserList users={pendingUsers} onValidate={handleValidate} />
         </section>
 
-        <section className="admin-dashboard__users">
+        <section className="dashboard-column">
+          <h2>Gérer les utilisateurs</h2>
           <UserList users={filteredUsers} onRoleChange={handleRoleChange} />
         </section>
-      </div>
+      </main>
     </div>
   )
 }

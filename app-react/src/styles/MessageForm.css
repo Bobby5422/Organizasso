@@ -1,45 +1,38 @@
-/* app-react/src/styles/MessageForm.css */
-
 .message-form {
-  /* cadre autour du formulaire */
-  border: 1px solid var(--color-white);
-  border-radius: 0.25rem;
-  padding: var(--space-2);
-  background-color: var(--color-black);
-  color: var(--color-white);
-
-  /* disposition verticale : titre au-dessus du contenu */
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-
-  /* largeur max et centrage optionnels */
-  max-width: 600px;
-  margin: 0 auto var(--space-3);
-}
-
-.message-form h2 {
-  /* titre du formulaire */
-  font-size: 1.5rem;
-  margin: 0;
-  text-align: left;
-}
-
-.message-form input[type="text"],
-.message-form textarea {
-  /* champs titre & contenu */
-  width: 100%;
-  padding: var(--space-1);
+  align-items: center;
   border: 1px solid var(--color-white);
   border-radius: 0.25rem;
+  padding: var(--space-1);
+  max-width: 100%;
+}
+
+.message-form input {
+  flex: 1;
+  border: none;
   background: transparent;
+  padding: var(--space-1) var(--space-2);
   color: var(--color-white);
   font-family: var(--font-sans);
-  resize: vertical;
+  font-size: 1rem;
+  outline: none;
 }
 
 .message-form button {
-  /* bouton Publier */
-  align-self: flex-start;
   padding: var(--space-1) var(--space-2);
+  background: var(--color-accent);
+  color: var(--color-white);
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  margin-left: var(--space-1);
+}
+
+.message-form input:focus {
+  outline: none;
+}
+
+.message-form button:hover {
+  opacity: 0.9;
 }

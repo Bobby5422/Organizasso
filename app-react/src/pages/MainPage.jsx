@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
-import MessageForm from '../components/MessageForm'; // 👈 Import du nouveau composant
+import MessageForm from '../components/MessageForm';
+import MessageItem from '../components/MessageItem'; // <-- Import ici
 import { searchMessages } from '../services/api';
 import '../styles/MainPage.css';
 
@@ -49,7 +50,6 @@ const MainPage = () => {
     navigate('/login');
   };
 
-  // ⬇️ Appelé par MessageForm
   const handleCreateMessage = async ({ title, content }) => {
     const res = await fetch('http://localhost:3000/api/messages', {
       method: 'POST',
@@ -99,7 +99,7 @@ const MainPage = () => {
       <Header role={role} onLogout={handleLogout} />
 
       <main className="main-content">
-        <MessageForm onSubmit={handleCreateMessage} /> {/* 👈 Utilisation ici */}
+        <MessageForm onSubmit={handleCreateMessage} />
 
         <h2>Messages du forum ouvert</h2>
         <SearchBar onSearch={handleSearch} />
@@ -109,31 +109,15 @@ const MainPage = () => {
         ) : (
           <ul className="message-list">
             {messages.map((msg) => (
-              <li key={msg._id || msg.messageID} className="message-item">
-                <div className="message-content">
-                  <strong>{msg.title}</strong> par {msg.userID?.identifier || 'Inconnu'}
-                  <p>{msg.content}</p>
-                </div>
-
-                <div className="reply-section">
-                  {replyingTo === msg._id ? (
-                    <>
-                      <textarea
-                        rows={3}
-                        value={replyContent}
-                        onChange={(e) => setReplyContent(e.target.value)}
-                        placeholder="Votre réponse..."
-                      />
-                      <button onClick={() => handleReplySubmit(msg._id)}>Envoyer réponse</button>
-                      <button onClick={() => { setReplyingTo(null); setReplyContent(''); }}>
-                        Annuler
-                      </button>
-                    </>
-                  ) : (
-                    <button onClick={() => setReplyingTo(msg._id)}>Répondre</button>
-                  )}
-                </div>
-              </li>
+              <MessageItem
+                key={msg._id || msg.messageID}
+                msg={msg}
+                replyingTo={replyingTo}
+                setReplyingTo={setReplyingTo}
+                replyContent={replyContent}
+                setReplyContent={setReplyContent}
+                handleReplySubmit={handleReplySubmit}
+              />
             ))}
           </ul>
         )}

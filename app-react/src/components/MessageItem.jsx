@@ -1,36 +1,31 @@
 import React, { useState } from 'react';
 
-import '../styles/MessageItem.css';
-
-const MessageItem = ({ message, onReply }) => {
-  const [showReplyForm, setShowReplyForm] = useState(false);
-  const [replyContent, setReplyContent] = useState('');
-
-  const handleReplySubmit = e => {
-    e.preventDefault();
-    onReply(message.messageID, replyContent);
-    setReplyContent('');
-    setShowReplyForm(false);
-  };
-
+const MessageItem = ({ msg, replyingTo, setReplyingTo, replyContent, setReplyContent, handleReplySubmit }) => {
   return (
-    <li>
-      <strong>{message.title}</strong> par {message.userID}
-      <p>{message.content}</p>
-      <button onClick={() => setShowReplyForm(!showReplyForm)}>
-        {showReplyForm ? 'Annuler' : 'Répondre'}
-      </button>
-      {showReplyForm && (
-        <form onSubmit={handleReplySubmit}>
-          <textarea
-            rows={3}
-            value={replyContent}
-            onChange={e => setReplyContent(e.target.value)}
-            required
-          />
-          <button type="submit">Envoyer réponse</button>
-        </form>
-      )}
+    <li className="message-item">
+      <div className="message-content">
+        <strong>{msg.title}</strong> par {msg.userID?.identifier || 'Inconnu'}
+        <p>{msg.content}</p>
+      </div>
+
+      <div className="reply-section">
+        {replyingTo === msg._id ? (
+          <>
+            <textarea
+              rows={3}
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              placeholder="Votre réponse..."
+            />
+            <button onClick={() => handleReplySubmit(msg._id)}>Envoyer réponse</button>
+            <button onClick={() => { setReplyingTo(null); setReplyContent(''); }}>
+              Annuler
+            </button>
+          </>
+        ) : (
+          <button onClick={() => setReplyingTo(msg._id)}>Répondre</button>
+        )}
+      </div>
     </li>
   );
 };

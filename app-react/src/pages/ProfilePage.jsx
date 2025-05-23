@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getUserProfile, getMessages, getAllUsers } from '../services/api';
 import { useAuth } from '../context/AuthContext'
+import { deleteMessage } from '../services/api';
 import Header from '../components/Header';
 
 
@@ -13,13 +14,25 @@ function ProfilePage() {
   const [messages, setMessages] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
 
+  const handleDelete = async (messageID) => {
+    if (!window.confirm('Voulez-vous vraiment supprimer ce message ?')) return;
+    try {
+      await deleteMessage(messageID);
+      setMessages(messages.filter(m => m._id !== messageID));
+    } catch (err) {
+      alert("Erreur lors de la suppression.");
+      console.error(err);
+    }
+  };
+
+
   useEffect(() => {
     const fetchData = async () => {
       const userData = await getUserProfile(userID);
       setUser(userData);
 
       const allMsgs = await getMessages();
-      setMessages(allMsgs.filter(m => m.userID === userID));
+      setMessages(allMsgs.filter(m => m.userID?._id === userID || m.userID === userID));
 
       const users = await getAllUsers();
       setAllUsers(users);
@@ -44,10 +57,13 @@ function ProfilePage() {
       ) : (
         <ul>
           {messages.map((msg) => (
-            <li key={msg._id}>
+            <li key={msg._id} style={{ marginBottom: 10 }}>
               <strong>{msg.title}</strong><br />
               {msg.content}<br />
-              <small>Posté le {new Date(msg.date).toLocaleString()}</small>
+              <small>Posté le {new Date(msg.date).toLocaleString()}</small><br />
+              <button onClick={() => handleDelete(msg._id)}>
+                Supprimer
+              </button>
             </li>
           ))}
         </ul>

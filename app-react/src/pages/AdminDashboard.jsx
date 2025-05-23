@@ -3,6 +3,7 @@ import PendingUserList from '../components/PendingUserList';
 import UserList from '../components/UserList';
 import { getPendingUsers, getAllUsers, validateUser, setUserRole } from '../services/api';
 import { useAuth } from '../context/AuthContext';  // <- import du contexte
+import Header from '../components/Header';
 
 import '../styles/AdminDashboard.css';
 
@@ -58,7 +59,8 @@ const AdminDashboard = () => {
 
   return (
     <div>
-      <h1>Admin Dashboard</h1>
+      <Header role={role} />
+      <h2>Admin Dashboard</h2>
 
       <PendingUserList users={pendingUsers} onValidate={handleValidate} />
 

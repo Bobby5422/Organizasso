@@ -28,7 +28,7 @@ const RestrictedForum = () => {
 
   const fetchMessages = async () => {
     try {
-      const data = await getMessages('closed');  // utilisation de la fonction importée
+      const data = await getMessages('closed'); 
       setMessages(data);
       setError('');
     } catch (err) {
@@ -38,7 +38,7 @@ const RestrictedForum = () => {
 
   const handleSearch = async (filters) => {
     try {
-      // Ajout de forumID 'closed' dans les filtres de recherche
+      // forumID 'closed' dans les filtres de recherche
       const results = await searchMessages({ ...filters, forumID: 'closed' });
       setMessages(results);
       setError('');

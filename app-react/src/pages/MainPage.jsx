@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import MessageForm from '../components/MessageForm';
 import MessageItem from '../components/MessageItem';
-import { getMessages, searchMessages, createMessage } from '../services/api'; // <-- Import API ici
+import { getMessages, searchMessages, createMessage } from '../services/api';
 import '../styles/MainPage.css';
 
 const MainPage = () => {
@@ -20,7 +20,7 @@ const MainPage = () => {
   // Récupérer les messages du forum ouvert
   const fetchMessages = async () => {
     try {
-      const data = await getMessages('open');  // Utilisation de la fonction importée
+      const data = await getMessages('open'); 
       setMessages(data);
     } catch (err) {
       console.error(err);

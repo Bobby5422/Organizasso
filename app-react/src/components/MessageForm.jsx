@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/MessageForm.css'; // Tu peux ajouter des styles dédiés si besoin
+import '../styles/MessageForm.css'; 
 
 const MessageForm = ({ onSubmit }) => {
   const [title, setTitle] = useState('');

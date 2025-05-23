@@ -1,10 +1,11 @@
+// src/pages/MainPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import MessageForm from '../components/MessageForm';
 import MessageItem from '../components/MessageItem';
-import { getMessages, searchMessages, createMessage } from '../services/api'; // <-- Import API ici
+import { getMessages, searchMessages, createMessage } from '../services/api';
 import '../styles/MainPage.css';
 
 const MainPage = () => {
@@ -17,10 +18,9 @@ const MainPage = () => {
   const userID = localStorage.getItem('userID');
   const navigate = useNavigate();
 
-  // Récupérer les messages du forum ouvert
   const fetchMessages = async () => {
     try {
-      const data = await getMessages('open');  // Utilisation de la fonction importée
+      const data = await getMessages('open');
       setMessages(data);
     } catch (err) {
       console.error(err);
@@ -38,7 +38,6 @@ const MainPage = () => {
 
   const handleSearch = async (filters) => {
     try {
-      // Ajoute forumID 'open' pour filtrer uniquement le forum ouvert
       const results = await searchMessages({ ...filters, forumID: 'open' });
       setMessages(results);
     } catch (err) {
@@ -90,36 +89,48 @@ const MainPage = () => {
   };
 
   return (
-    <div className="main-page">
+    <>
       <Header role={role} onLogout={handleLogout} />
+      <div className="main-page-content">
+        <div className="main-page">
+          <main className="main-content">
+            {/* Colonne de gauche */}
+            <section className="left-col">
+              <MessageForm onSubmit={handleCreateMessage} />
+            </section>
 
-      <main className="main-content">
-        <MessageForm onSubmit={handleCreateMessage} />
+            {/* Colonne de droite */}
+            <section className="right-col">
+              <h2>Messages du forum ouvert</h2>
+              <div className="search-bar-container">
+                <SearchBar onSearch={handleSearch} />
+              </div>
 
-        <h2>Messages du forum ouvert</h2>
-        <SearchBar onSearch={handleSearch} />
+              {error && <p className="error">{error}</p>}
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-
-        {messages.length === 0 ? (
-          <p>Aucun message pour le moment.</p>
-        ) : (
-          <ul className="message-list">
-            {messages.map((msg) => (
-              <MessageItem
-                key={msg._id}
-                msg={msg}
-                replyingTo={replyingTo}
-                setReplyingTo={setReplyingTo}
-                replyContent={replyContent}
-                setReplyContent={setReplyContent}
-                handleReplySubmit={handleReplySubmit}
-              />
-            ))}
-          </ul>
-        )}
-      </main>
-    </div>
+              <ul className="message-list">
+                {messages.length === 0 ? (
+                  <li className="no-message">Aucun message pour le moment.</li>
+                ) : (
+                  messages.map((msg) => (
+                    <li key={msg._id}>
+                      <MessageItem
+                        msg={msg}
+                        replyingTo={replyingTo}
+                        setReplyingTo={setReplyingTo}
+                        replyContent={replyContent}
+                        setReplyContent={setReplyContent}
+                        handleReplySubmit={handleReplySubmit}
+                      />
+                    </li>
+                  ))
+                )}
+              </ul>
+            </section>
+          </main>
+        </div>
+      </div>
+    </>
   );
 };
 
